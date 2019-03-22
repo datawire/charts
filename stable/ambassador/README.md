@@ -65,6 +65,7 @@ The following tables lists the configurable parameters of the Ambassador chart a
 | `replicaCount`                     | Number of Ambassador replicas                                                   | `3`                           |
 | `resources`                        | CPU/memory resource requests/limits                                             | `{}`                          |
 | `securityContext`                  | Set security context for pod                                                    | `{ "runAsUser": "8888" }`     |
+| `initContainers`                   | Containers used to initialize context for pods                                  | `{}`                          |
 | `service.annotations`              | Annotations to apply to Ambassador service                                      | See "Annotations" below       |
 | `service.externalTrafficPolicy`    | Sets the external traffic policy for the service                                | `""`                          |
 | `service.http.enabled`             | if port 80 should be opened for service                                         | `true`                        |

@@ -55,6 +55,10 @@ spec:
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         {{- if .Values.prometheusExporter.enabled }}
         - name: prometheus-exporter
