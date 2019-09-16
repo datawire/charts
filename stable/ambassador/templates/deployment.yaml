@@ -176,17 +176,15 @@ spec:
         - name: ambassador-pro
           image: "{{ .Values.pro.image.repository }}:amb-sidecar-{{ .Values.pro.image.tag }}"
           ports:
-          - name: grpc-auth
-            containerPort: {{ .Values.pro.ports.auth }}
-          - name: grpc-ratelimit
-            containerPort: {{ .Values.pro.ports.ratelimit }}
+          - name: http
+            containerPort: {{ .Values.pro.port }}
           env:
           - name: REDIS_SOCKET_TYPE
             value: tcp
           - name: REDIS_URL
             value: {{ include "ambassador.fullname" . }}-pro-redis:6379
           - name: APRO_HTTP_PORT
-            value: "{{ .Values.pro.ports.auth }}"
+            value: "{{ .Values.pro.port }}"
           - name: APP_LOG_LEVEL
             value: "{{ .Values.pro.logLevel  }}"
           - name: AMBASSADOR_NAMESPACE

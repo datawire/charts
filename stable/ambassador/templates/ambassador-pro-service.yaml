@@ -11,7 +11,7 @@ spec:
   {{- if hasKey .Values.env "AMBASSADOR_ID" }}
   ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
   {{- end }}
-  auth_service: 127.0.0.1:{{ .Values.pro.ports.auth }}
+  auth_service: 127.0.0.1:{{ .Values.pro.port }}
   {{- if .Values.pro.authService.optional_configurations }}
   {{- toYaml .Values.pro.authService.optional_configurations | nindent 2}}
   {{- end }}
@@ -37,8 +37,58 @@ spec:
   {{- if hasKey .Values.env "AMBASSADOR_ID" }}
   ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
   {{- end }}
-  service: 127.0.0.1:{{ .Values.pro.ports.ratelimit }}
+  service: 127.0.0.1:{{ .Values.pro.port }}
 {{- end }}
+{{- if .Values.pro.devPortal.enabled }}
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: ambassador-pro-devportal
+spec:
+  {{- if hasKey .Values.env "AMBASSADOR_ID" }}
+  ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
+  {{- end }}
+  prefix: /docs/
+  rewrite: ""
+  service: 127.0.0.1:{{ .Values.pro.port }}
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: ambassador-pro-devportal-api
+spec:
+  {{- if hasKey .Values.env "AMBASSADOR_ID" }}
+  ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
+  {{- end }}
+  prefix: /openapi/
+  rewrite: ""
+  service: 127.0.0.1:{{ .Values.pro.port }}
+---
+apiVersion: getambassador.io/v1beta2
+kind: FilterPolicy
+metadata:
+  name: ambassador-pro-internal-access-control
+spec:
+  {{- if hasKey .Values.env "AMBASSADOR_ID" }}
+  ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
+  {{- end }}
+  rules:
+    - host: "*"
+      path: "*/.ambassador-internal/*"
+      filters:
+        - name: ambassador-pro-internal-access-control
+---
+apiVersion: getambassador.io/v1beta2
+kind: Filter
+metadata:
+  name: ambassador-pro-internal-access-control
+spec:
+  {{- if hasKey .Values.env "AMBASSADOR_ID" }}
+  ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
+  {{- end }}
+  Internal: {}
+{{- end - }}
 {{- else }}
 ---
 apiVersion: v1
@@ -63,7 +113,7 @@ metadata:
       {{- if hasKey .Values.env "AMBASSADOR_ID" }}
       ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
       {{- end }}
-      auth_service: 127.0.0.1:{{ .Values.pro.ports.auth }}
+      auth_service: 127.0.0.1:{{ .Values.pro.port }}
       {{- toYaml .Values.pro.authService.optional_configurations | nindent 6}}
       ---
       # This mapping needs to exist, but is never actually followed.
@@ -84,7 +134,7 @@ metadata:
       {{- if hasKey .Values.env "AMBASSADOR_ID" }}
       ambassador_id: {{ .Values.env.AMBASSADOR_ID | quote }}
       {{- end }}
-      service: 127.0.0.1:{{ .Values.pro.ports.ratelimit }}
+      service: 127.0.0.1:{{ .Values.pro.port }}
       {{- end }}
 spec:
   ports:
