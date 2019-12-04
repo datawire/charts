@@ -3,6 +3,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+aes:
+  enabled: true
+  image:
+    repository: quay.io/datawire-dev/aes
+    tag: 0.99.0-rc-latest
+
 replicaCount: 3
 daemonSet: false
 
@@ -42,7 +48,8 @@ env:
   # labels Ambassador with an ID to allow for configuring multiple Ambassadors in a cluster
   # AMBASSADOR_ID: default
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: aes-pull-secret
 
 securityContext:
   runAsUser: 8888
