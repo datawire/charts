@@ -71,6 +71,11 @@ spec:
             - key: ambassadorConfig
               path: ambassador-config.yaml
         {{- end }}
+        {{- if contains "datawire-dev/aes" .Values.image.repository}}
+        - name: ambassador-edge-stack-secrets
+          secret:
+            secretName: ambassador-edge-stack
+        {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -132,7 +137,7 @@ spec:
               value: {{ .Values.pro.licenseKey.value }}
             {{- end }}
             {{- end }}
-            {{- if .Values.redis.enabled }}
+            {{- if contains "datawire-dev/aes" .Values.image.repository }}
             - name: REDIS_URL
               value: {{ include "ambassador.fullname" . }}-redis:6379
             {{- end }}
@@ -182,6 +187,11 @@ spec:
             - name: ambassador-config
               mountPath: /ambassador/ambassador-config/ambassador-config.yaml
               subPath: ambassador-config.yaml
+          {{- end }}
+          {{- if contains "datawire-dev/aes" .Values.image.repository }}
+            - name: ambassador-edge-stack-secrets
+              mountPath: /.config/ambassador
+              readOnly: true
           {{- end }}
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}

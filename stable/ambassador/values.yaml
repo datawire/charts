@@ -3,9 +3,16 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace:
-redis:
-  enabled: true
+# Manually set metadata for the Release.
+#
+# Defaults to .Chart.Name
+nameOverride: ""
+# Defaults to .Release.Name-.Chart.Name unless .Release.Name contains "ambassador"
+fullnameOverride: ""
+# Defaults to .Release.Namespace
+namespaceOverride: ambassador
+createNamespace: true
+
 replicaCount: 3
 daemonSet: false
 
@@ -56,8 +63,6 @@ image:
   tag: 0.99.0-rc-latest
   pullPolicy: IfNotPresent
 
-nameOverride: ""
-fullnameOverride: ""
 dnsPolicy: "ClusterFirst"
 hostNetwork: false
 
@@ -215,6 +220,40 @@ crds:
   enabled: true
   create: true
   keep: true
+
+# The Ambassador Edge Stack is free for limited use without a license key. 
+# Go to https://{ambassador-host}/edge_stack/admin/#dashboard to register
+# for a community license key.
+
+# Set createSecret: false is installing multiple releases of The Ambassador
+# Edge Stack in the same namespace.
+licenseKey:
+  value:
+  createSecret: true
+
+
+# The Ambassador Edge Stack uses a redis instance for managing authentication, 
+# rate limiting, and sharing minor configuration details between pods for 
+# centralized management. These values configure the redis instance that ships
+# by default with The Ambassador Edge Stack.
+redis:
+  enabled: true
+  # Annotations for Ambassador Pro's redis instance.
+  annotations:
+    deployment:
+      {}
+    service:
+      {}
+  resources: {}
+  # If you want to specify resources, uncomment the following
+  # lines and remove the curly braces after 'resources:'.
+  # These are placeholder values and must be tuned.
+  #   limits:
+  #     cpu: 100m
+  #     memory: 256Mi
+  #   requests:
+  #     cpu: 50m
+  #     memory: 128Mi
 
 pro:
   enabled: false

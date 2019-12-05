@@ -39,7 +39,7 @@ rules:
   - apiGroups: [ "extensions" ]
     resources: [ "ingresses/status" ]
     verbs: ["update"]
-  {{- if .Values.pro.enabled }}
+  {{- if or .Values.pro.enabled (contains "datawire-dev/aes" .Values.image.repository) }}
   - apiGroups: [""]
     resources: [ "secrets" ]
     verbs: ["get", "list", "watch", "create"]
