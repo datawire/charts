@@ -3,6 +3,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+namespace:
+redis:
+  enabled: true
 replicaCount: 3
 daemonSet: false
 
@@ -42,14 +45,15 @@ env:
   # labels Ambassador with an ID to allow for configuring multiple Ambassadors in a cluster
   # AMBASSADOR_ID: default
 
-imagePullSecrets: []
+imagePullSecrets: 
+- name: aes-pull-secret
 
 securityContext:
   runAsUser: 8888
 
 image:
-  repository: quay.io/datawire/ambassador
-  tag: 0.85.0
+  repository: quay.io/datawire-dev/aes
+  tag: 0.99.0-rc-latest
   pullPolicy: IfNotPresent
 
 nameOverride: ""

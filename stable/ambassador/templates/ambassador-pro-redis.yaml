@@ -1,11 +1,12 @@
-{{ if and .Values.pro.enabled }}
+{{ if or .Values.pro.enabled .Values.redis.enabled }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "ambassador.fullname" . }}-pro-redis
+  name: {{ include "ambassador.fullname" . }}-redis
+  namespace: {{ include "ambassador.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-pro-redis
+    app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-redis
     app.kubernetes.io/part-of: {{ .Release.Name }}
     helm.sh/chart: {{ include "ambassador.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -18,15 +19,16 @@ spec:
   - port: 6379
     targetPort: 6379
   selector:
-    app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-pro-redis
+    app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-redis
     app.kubernetes.io/instance: {{ .Release.Name }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ambassador.fullname" . }}-pro-redis
+  name: {{ include "ambassador.fullname" . }}-redis
+  namespace: {{ include "ambassador.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-pro-redis
+    app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-redis
     app.kubernetes.io/part-of: {{ .Release.Name }}
     helm.sh/chart: {{ include "ambassador.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -37,12 +39,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-pro-redis
+      app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-redis
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-pro-redis
+        app.kubernetes.io/name: {{ include "ambassador.fullname" . }}-redis
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:

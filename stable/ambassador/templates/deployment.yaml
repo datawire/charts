@@ -6,6 +6,7 @@ kind: Deployment
 {{- end }}
 metadata:
   name: {{ include "ambassador.fullname" . }}
+  namespace: {{ include "ambassador.namespace" . }}
   labels:
     app.kubernetes.io/name: {{ include "ambassador.name" . }}
     app.kubernetes.io/part-of: {{ .Release.Name }}
@@ -131,6 +132,10 @@ spec:
               value: {{ .Values.pro.licenseKey.value }}
             {{- end }}
             {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: {{ include "ambassador.fullname" . }}-redis:6379
+            {{- end }}
             {{- if .Values.prometheusExporter.enabled }}
             - name: STATSD_ENABLED
               value: "true"
@@ -199,7 +204,7 @@ spec:
           - name: REDIS_SOCKET_TYPE
             value: tcp
           - name: REDIS_URL
-            value: {{ include "ambassador.fullname" . }}-pro-redis:6379
+            value: {{ include "ambassador.fullname" . }}-redis:6379
           - name: APRO_HTTP_PORT
             value: "{{ .Values.pro.ports.auth }}"
           - name: APP_LOG_LEVEL
