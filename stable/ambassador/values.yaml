@@ -10,8 +10,8 @@ nameOverride: ""
 # Defaults to .Release.Name-.Chart.Name unless .Release.Name contains "ambassador"
 fullnameOverride: ""
 # Defaults to .Release.Namespace
-namespaceOverride: ambassador
-createNamespace: true
+namespaceOverride:
+createNamespace: false
 
 replicaCount: 3
 daemonSet: false
@@ -52,8 +52,7 @@ env:
   # labels Ambassador with an ID to allow for configuring multiple Ambassadors in a cluster
   # AMBASSADOR_ID: default
 
-imagePullSecrets: 
-- name: aes-pull-secret
+imagePullSecrets: []
 
 securityContext:
   runAsUser: 8888
