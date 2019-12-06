@@ -1,7 +1,24 @@
-Congratulations! You've successfully installed Ambassador.
+-------------------------------------------------------------------------------
+{{- if contains "datawire-dev/aes" .Values.image.repository }}
+Congratulations! You have successfully installed The Ambassador Edge Stack and it is now configured to route traffic to your cluster!
+
+Two more steps remain to finish the installation of The Ambassaor Edge Stack 
+and enable authentication, rate limiting, automatic HTTPS, and other features.
+
+  1. Upgrade to the v2 Custom Resource Definitions by running
+
+  kubectl apply -f https://getambassador.io/ambassador/ambassador-edge-stack-crds.yaml 
+
+  2. Install the Ambassador Edge Stack configuration resources
+
+  kubectl apply -f https://getambassador.io/ambassador/ambassador-edge-stack-resources.yaml --namespace {{ include "ambassador.namespace" .}}
+
+{{- else }}
+  Congratulations! You've successfully installed Ambassador!
+{{- end }}
 
 For help, visit our Slack at https://d6e.co/slack or view the documentation online at https://www.getambassador.io.
-
+-------------------------------------------------------------------------------
 To get the IP address of Ambassador, run the following commands:
 
 {{- if contains "NodePort" .Values.service.type }}
@@ -23,4 +40,15 @@ NOTE: It may take a few minutes for the LoadBalancer IP to be available.
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ include "ambassador.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl port-forward $POD_NAME 8080:80
+{{- end }}
+-------------------------------------------------------------------------------
+{{- if contains "datawire-dev/aes" .Values.image.repository }}
+  {{- if empty .Values.licenseKey.value }}
+
+NOTE: You are currently running The Ambassador Edge Stack in EVALUATION MODE. 
+  
+Request a free community license key at https://SERVICE_IP/edge_stack_admin/#dashboard 
+to unlock all the features of The Ambassador Edge Stack and update the value of 
+licenseKey.value in your values.yaml file.
+  {{- end }}
 {{- end }}

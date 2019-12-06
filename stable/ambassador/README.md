@@ -48,6 +48,10 @@ The following tables lists the configurable parameters of the Ambassador chart a
 
 | Parameter                          | Description                                                                     | Default                           |
 | ---------------------------------- | ------------------------------------------------------------------------------- | --------------------------------- |
+| `nameOverride`                     | Override the generated chart name. Defaults to .Chart.Name.                     |                                   |
+| `fullnameOverride`                 | Override the generated release name. Defaults to .Release.Name.                 |                                   |
+| `namespaceOverride`                | Override the namespace for the release. Default to .Release.Namespace.          |                                   |
+| `createNamespace`                  | Create the override namespace if it does not already exist.                     |                                   |
 | `adminService.create`              | If `true`, create a service for Ambassador's admin UI                           | `true`                            |
 | `adminService.nodePort`            | If explicit NodePort for admin service is required                              | `true`                            |
 | `adminService.type`                | Ambassador's admin service type to be used                                      | `ClusterIP`                       |
@@ -96,6 +100,8 @@ The following tables lists the configurable parameters of the Ambassador chart a
 | `serviceAccount.name`              | Service account to be used                                                      | `ambassador`                      |
 | `volumeMounts`                     | Volume mounts for the ambassador service                                        | `[]`                              |
 | `volumes`                          | Volumes for the ambassador service                                              | `[]`                              |
+| `licenseKey.vlaue`                 | Ambassador Edge Stack license. Empty will install in evaluation mode.           | ``                                |
+| `licenseKey.createSecret`          | Set to `false` if installing mutltiple Ambassdor Edge Stacks in a namespace.    | `true`                            |
 | `pro.enabled`                      | Installs the Ambassador Pro container as a sidecar to Ambassador                | `false`                           |
 | `pro.image.repository`             | Ambassador Pro image                                                            | `quay.io/datawire/ambassador_pro` |
 | `pro.image.tag`                    | Ambassador Pro image tag                                                        | `0.10.0`                          |
@@ -127,6 +133,17 @@ The following tables lists the configurable parameters of the Ambassador chart a
 | `prometheusExporter.resources`     | DEPRECATED: CPU/memory resource requests/limits                                 | `{}`                              |
 
 **NOTE:** Make sure the configured `service.http.targetPort` and `service.https.targetPort` ports match your [Ambassador Module's](https://www.getambassador.io/reference/modules/#the-ambassador-module) `service_port` and `redirect_cleartext_from` configurations.
+
+### The Ambasssador Edge Stack
+
+The Ambassador Edge Stack provides a comprehensive, self-service edge stack in 
+the Kubernetes cluster with a decentralized deployment model and a declarative paradigm. 
+
+By default, this chart will install the latest image of The Ambassador Edge Stack which 
+will replace your existing deployment of Ambassador with no changes to functionality.
+
+See the installation notes for instructions on how to enable the advanced features of 
+The Ambassador Edge Stack.
 
 ### CRDs
 
