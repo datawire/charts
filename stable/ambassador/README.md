@@ -137,13 +137,18 @@ The following tables lists the configurable parameters of the Ambassador chart a
 ### The Ambasssador Edge Stack
 
 The Ambassador Edge Stack provides a comprehensive, self-service edge stack in 
-the Kubernetes cluster with a decentralized deployment model and a declarative paradigm. 
+the Kubernetes cluster with a decentralized deployment model and a declarative 
+paradigm. 
 
-By default, this chart will install the latest image of The Ambassador Edge Stack which 
-will replace your existing deployment of Ambassador with no changes to functionality.
+By default, this chart will install the latest image of The Ambassador Edge 
+Stack which will replace your existing deployment of Ambassador with no changes
+to functionality.
 
-See the installation notes for instructions on how to enable the advanced features of 
-The Ambassador Edge Stack.
+See the installation notes for instructions on how to enable the advanced 
+features of The Ambassador Edge Stack.
+
+To install the Ambassador API Gateway, simply change the `image` to your
+desired version of the Ambassador API Gateway.
 
 ### CRDs
 
